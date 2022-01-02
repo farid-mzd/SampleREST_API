@@ -10,7 +10,6 @@ namespace SampleREST_API.Models.Custom
     [Keyless]
     public class Dog : BusinessObject
     {
-        //public override long Id { get; init; }
 
         public string Name { get; set; }
 

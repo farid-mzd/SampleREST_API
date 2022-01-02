@@ -17,6 +17,7 @@ namespace SampleREST_API.Models
 
             base.OnConfiguring(optionsBuilder);
         }
+
     }
 
 }

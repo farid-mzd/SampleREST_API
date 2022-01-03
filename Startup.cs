@@ -5,10 +5,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SampleREST_API.Repositories.Concrete;
+using SampleREST_API.Repositories.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SampleREST_API.Services.Abstract;
+using SampleREST_API.Services.Concrete;
+using SampleREST_API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace SampleREST_API
 {
@@ -26,6 +32,14 @@ namespace SampleREST_API
         {
 
             services.AddControllers();
+
+            services.AddDbContext<RESTAPIDbContext>(options =>
+                   options.UseSqlServer(Configuration.GetConnectionString("MSSQLDBContext")));
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IDogService, DogService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

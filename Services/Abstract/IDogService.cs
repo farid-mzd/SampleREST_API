@@ -8,8 +8,8 @@ namespace SampleREST_API.Services.Abstract
 {
     public interface IDogService
     {
-        IEnumerable<Dog> GetDogs();
+        Task<IEnumerable<Dog>> GetDogs();
 
-        Dog AddDog(Dog dog);
+        Task<Dog> AddDog(Dog dog);
     }
 }

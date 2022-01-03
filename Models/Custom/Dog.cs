@@ -10,20 +10,23 @@ using System.Threading.Tasks;
 namespace SampleREST_API.Models.Custom
 {
     [Keyless]
-    public class Dog : BusinessObject
+    public class Dog 
     {
-        [Required]
+        [Required(ErrorMessage ="Name must be provided")]
         [Column(TypeName = "nvarchar(500)")]
         public string Name { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Color must be provided")]
         [Column(TypeName ="nvarchar(500)")]
         public string Color { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Tail length must be provided")]
+        [Range(0, Double.MaxValue,ErrorMessage ="Tail length must be positive number")]
         public double? Tail_Length { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Weight must be provided")]
+        //[Range(0,Double.MaxValue, ErrorMessage = " must be positive number")]
+        [MinLength(0, ErrorMessage = "Weight must be positive number")]
         public double? Weight { get; set; }
 
     }

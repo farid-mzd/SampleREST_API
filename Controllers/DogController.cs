@@ -1,47 +1,66 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SampleREST_API.Models.Custom;
+using SampleREST_API.Services.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace SampleREST_API.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("/")]
     [ApiController]
     public class DogController : ControllerBase
     {
-        // GET: api/<DogController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IDogService dogService;
+
+        public DogController(IDogService dogService)
         {
-            return new string[] { "value1", "value2" };
+            this.dogService = dogService;
         }
 
-        // GET api/<DogController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("[action]")]
+        public IActionResult Ping()
         {
-            return "value";
+            //var response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            //response.Content = new StringContent("Dogs house service.Version 1.0.1");
+
+            //response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
+
+            //return response;
+
+            return Content("Dogs house service.Version 1.0.1");
+
         }
 
-        // POST api/<DogController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+
+        [HttpGet("dogs")]
+        public async Task<IActionResult> Get()
         {
+            return Ok(await dogService.GetDogs());
         }
 
-        // PUT api/<DogController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+
+        [HttpPost("dog")]
+        public async Task<IActionResult> Add([FromBody] Dog dog)
         {
+            try
+            {
+
+            return Ok(await dogService.AddDog(dog));
+            }
+            catch (Exception ex)
+            {
+
+                return Conflict(new {ex.Message});
+            }
         }
 
-        // DELETE api/<DogController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        
     }
 }

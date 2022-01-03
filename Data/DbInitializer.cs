@@ -24,7 +24,9 @@ namespace SampleREST_API.Data
                 new Dog { Name= "Jessy", Color="black & white", Tail_Length=7, Weight=14}
             };
 
-             dbContext.SaveChanges();
+            dbContext.Dogs.AddRange(dogs);
+
+            dbContext. SaveChanges();
         }
     }
 }

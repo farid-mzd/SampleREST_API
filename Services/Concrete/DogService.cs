@@ -1,4 +1,5 @@
 ﻿using SampleREST_API.Models.Custom;
+using SampleREST_API.Repositories.Abstract;
 using SampleREST_API.Services.Abstract;
 using System;
 using System.Collections.Generic;
@@ -9,14 +10,33 @@ namespace SampleREST_API.Services.Concrete
 {
     public class DogService : IDogService
     {
-        public Dog AddDog(Dog dog)
+        public IUnitOfWork UW { get; set; }
+
+        public DogService(IUnitOfWork UW)
         {
-            throw new NotImplementedException();
+            this.UW = UW;
         }
 
-        public IEnumerable<Dog> GetDogs()
+        public async Task<Dog> AddDog(Dog dog)
         {
-            throw new NotImplementedException();
+            if (await UW.DogRepository.GetWithName(dog.Name) == null)
+            {
+                UW.DogRepository.Add(dog);
+
+                await UW.Complete();
+
+                return await UW.DogRepository.GetWithName(dog.Name);
+            }
+            else
+            {
+                throw new Exception("Dog with the given name already exists!");
+            }
+            
+        }
+
+        public async Task<IEnumerable<Dog>> GetDogs()
+        {
+           return await UW.DogRepository.Get();
         }
     }
 }

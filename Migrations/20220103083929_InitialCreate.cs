@@ -10,8 +10,8 @@ namespace SampleREST_API.Migrations
                 name: "Dogs",
                 columns: table => new
                 {
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(500)", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(500)", nullable: false),
                     Tail_Length = table.Column<double>(type: "float", nullable: false),
                     Weight = table.Column<double>(type: "float", nullable: false)
                 },

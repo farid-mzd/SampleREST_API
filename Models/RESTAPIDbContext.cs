@@ -17,7 +17,11 @@ namespace SampleREST_API.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Dog>()
-                .HasKey( a => a.Name );
+                .HasIndex(u => u.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<Dog>()
+              .HasKey(u => u.Name);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

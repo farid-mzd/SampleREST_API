@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace SampleREST_API.Models.Custom
 {
-    [Keyless]
     public class Dog 
     {
         [Required(ErrorMessage ="Name must be provided")]

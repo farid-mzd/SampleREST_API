@@ -35,7 +35,16 @@ namespace SampleREST_API.Controllers
         {
             try
             {
-            return Ok(await dogService.GetDogs());
+                var result = await dogService.GetDogs();
+
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return NoContent();
+                }
             }
             catch (Exception)
             {

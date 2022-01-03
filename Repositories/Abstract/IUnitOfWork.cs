@@ -9,7 +9,7 @@ namespace SampleREST_API.Repositories.Abstract
     {
         IDogRepository DogRepository { get; }
 
-        Task<bool> Complete();
+        Task Complete();
 
     }
 }

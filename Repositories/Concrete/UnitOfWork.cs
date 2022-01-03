@@ -20,9 +20,9 @@ namespace SampleREST_API.Repositories.Concrete
 
         public IDogRepository DogRepository { get; private set; }
 
-        public async Task<bool> Complete()
+        public async Task Complete()
         {
-            return await restApiContext.SaveChangesAsync() > 0;
+             await restApiContext.SaveChangesAsync();
         }
 
         public void Dispose()

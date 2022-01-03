@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SampleREST_API.Models.Base;
+using SampleREST_API.Models.CustomAttributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,20 +15,21 @@ namespace SampleREST_API.Models.Custom
     {
         [Required(ErrorMessage ="Name must be provided")]
         [Column(TypeName = "nvarchar(500)")]
+        [StringLength(500,ErrorMessage ="Max allowed character length is 500")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Color must be provided")]
         [Column(TypeName ="nvarchar(500)")]
+        [StringLength(500, ErrorMessage = "Max allowed character length is 500")]
         public string Color { get; set; }
 
         [Required(ErrorMessage = "Tail length must be provided")]
-        [Range(0, Double.MaxValue,ErrorMessage ="Tail length must be positive number")]
+        [MinValue(0, ErrorMessage = "Tail length must be positive number")]
         public double? Tail_Length { get; set; }
 
         [Required(ErrorMessage = "Weight must be provided")]
-        //[Range(0,Double.MaxValue, ErrorMessage = " must be positive number")]
-        [MinLength(0, ErrorMessage = "Weight must be positive number")]
-        public double? Weight { get; set; }
+        [MinValue(0,ErrorMessage = "Weight must be positive number")] 
+        public double Weight { get; set; }
 
     }
 }

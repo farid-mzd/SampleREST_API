@@ -26,23 +26,21 @@ namespace SampleREST_API.Controllers
         [HttpGet("[action]")]
         public IActionResult Ping()
         {
-            //var response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            //response.Content = new StringContent("Dogs house service.Version 1.0.1");
-
-            //response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
-
-            //return response;
-
             return Content("Dogs house service.Version 1.0.1");
-
         }
 
 
         [HttpGet("dogs")]
         public async Task<IActionResult> Get()
         {
+            try
+            {
             return Ok(await dogService.GetDogs());
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
 
@@ -51,16 +49,23 @@ namespace SampleREST_API.Controllers
         {
             try
             {
+                if (ModelState.IsValid)
+                {
 
-            return Ok(await dogService.AddDog(dog));
+                    return Ok(await dogService.AddDog(dog));
+
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
             }
             catch (Exception ex)
             {
-
-                return Conflict(new {ex.Message});
+                return Conflict(new { ex.Message });
             }
         }
 
-        
+
     }
 }

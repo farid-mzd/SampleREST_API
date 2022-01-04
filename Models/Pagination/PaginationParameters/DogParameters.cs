@@ -8,6 +8,8 @@ namespace SampleREST_API.Models.Pagination.PaginationParameters
 {
     public class DogParameters : QueryStringParameters
     {
-       
+        public string Attribute { get; set; }
+
+
     }
 }

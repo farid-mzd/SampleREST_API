@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SampleREST_API.Models.Custom;
+using SampleREST_API.Models.CustomExceptions;
 using SampleREST_API.Models.Pagination;
 using SampleREST_API.Models.Pagination.PaginationParameters;
 using SampleREST_API.Services.Abstract;
@@ -63,10 +64,16 @@ namespace SampleREST_API.Controllers
                     return NoContent();
                 }
             }
-            catch (Exception ex)
+            catch (InvalidQueryStringException ex)
             {
+               return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+              
                 return BadRequest();
             }
+            
         }
 
 

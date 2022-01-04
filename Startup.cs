@@ -15,6 +15,8 @@ using SampleREST_API.Services.Abstract;
 using SampleREST_API.Services.Concrete;
 using SampleREST_API.Models;
 using Microsoft.EntityFrameworkCore;
+using SampleREST_API.Models.Sorting;
+using SampleREST_API.Models.Custom;
 
 namespace SampleREST_API
 {
@@ -39,6 +41,8 @@ namespace SampleREST_API
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IDogService, DogService>();
+
+            services.AddScoped<ISortHelper<Dog>, SortHelper<Dog>>();
 
         }
 

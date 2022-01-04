@@ -1,6 +1,7 @@
 ﻿using SampleREST_API.Models.Custom;
 using SampleREST_API.Models.Pagination;
 using SampleREST_API.Models.Pagination.PaginationParameters;
+using SampleREST_API.Models.Sorting;
 using SampleREST_API.Repositories.Abstract;
 using SampleREST_API.Services.Abstract;
 using System;
@@ -12,11 +13,14 @@ namespace SampleREST_API.Services.Concrete
 {
     public class DogService : IDogService
     {
-        public IUnitOfWork UW { get; set; }
+        private IUnitOfWork UW { get; set; }
 
-        public DogService(IUnitOfWork UW)
+        public ISortHelper<Dog> sortHelper { get; set; }
+
+        public DogService(IUnitOfWork UW, ISortHelper<Dog> sortHelper)
         {
             this.UW = UW;
+            this.sortHelper = sortHelper;
         }
 
         public async Task<Dog> AddDog(Dog dog)
@@ -40,7 +44,17 @@ namespace SampleREST_API.Services.Concrete
         {
             var result = await UW.DogRepository.Get();
 
+            result = sortHelper.ApplySort(result.AsQueryable(), dogParameters.Attribute, dogParameters.Order);
+
             return PagedList<Dog>.ToPagedList(result, dogParameters.PageNumber, dogParameters.PageSize);
         }
+
+        //public async Task<PagedList<Dog>> GetDogs(string attribute, string orderBy,DogParameters dogParameters)
+        //{
+
+        //    var result = PagedList<Dog>.ToPagedList(await UW.DogRepository.Get(), dogParameters.PageNumber, dogParameters.PageSize);
+
+        //    result.AsQueryable().OrderBy(orderBy);
+        //}
     }
 }

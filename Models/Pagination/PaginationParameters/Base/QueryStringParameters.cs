@@ -14,5 +14,9 @@ namespace SampleREST_API.Models.Pagination.PaginationParameters.Base
         private int _pageSize = 5;
 
         public int PageSize { get { return _pageSize; } set { _pageSize = (value > maxPageSize) ? maxPageSize : value; } }
+
+        public string Order { get; set; }
+
+        public string Attribute { get; set; }
     }
 }

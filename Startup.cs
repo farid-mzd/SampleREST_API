@@ -17,6 +17,7 @@ using SampleREST_API.Models;
 using Microsoft.EntityFrameworkCore;
 using SampleREST_API.Models.Sorting;
 using SampleREST_API.Models.Custom;
+using AspNetCoreRateLimit;
 
 namespace SampleREST_API
 {
@@ -32,6 +33,17 @@ namespace SampleREST_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+
+            services.AddMemoryCache();
+
+            services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
+
+            services.Configure<IpRateLimitPolicies>(Configuration.GetSection("IpRateLimitPolicies"));
+
+            services.AddInMemoryRateLimiting();
+
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
             services.AddControllers();
 
@@ -53,6 +65,8 @@ namespace SampleREST_API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseIpRateLimiting();
 
             app.UseRouting();
 

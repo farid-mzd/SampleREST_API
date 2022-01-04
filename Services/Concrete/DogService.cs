@@ -48,13 +48,5 @@ namespace SampleREST_API.Services.Concrete
 
             return PagedList<Dog>.ToPagedList(result, dogParameters.PageNumber, dogParameters.PageSize);
         }
-
-        //public async Task<PagedList<Dog>> GetDogs(string attribute, string orderBy,DogParameters dogParameters)
-        //{
-
-        //    var result = PagedList<Dog>.ToPagedList(await UW.DogRepository.Get(), dogParameters.PageNumber, dogParameters.PageSize);
-
-        //    result.AsQueryable().OrderBy(orderBy);
-        //}
     }
 }

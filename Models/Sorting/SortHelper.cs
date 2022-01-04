@@ -66,7 +66,7 @@ namespace SampleREST_API.Models.Sorting
             else
             {
                 //should return exception
-                throw new InvalidQueryStringException("Attribute given name does not excists. Please provide valid attribute name!");
+                throw new InvalidQueryStringException("Attribute given name does not exists. Please provide valid attribute name!");
             }
 
            

@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SampleREST_API.Models.Custom;
+using SampleREST_API.Models.Pagination;
+using SampleREST_API.Models.Pagination.PaginationParameters;
 using SampleREST_API.Services.Abstract;
 using System;
 using System.Collections.Generic;
@@ -31,22 +34,36 @@ namespace SampleREST_API.Controllers
 
 
         [HttpGet("dogs")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] DogParameters dogParameters)
         {
             try
             {
-                var result = await dogService.GetDogs();
+                var dogs = await dogService.GetDogs(dogParameters);
 
-                if (result != null)
+
+                if (dogs.TotalCount > 0)
                 {
-                    return Ok(result);
+
+                    var metadata = new
+                    {
+                        dogs.PageSize,
+                        dogs.CurrentPage,
+                        dogs.TotalPages,
+                        dogs.TotalCount,
+                        dogs.HasNext,
+                        dogs.HasPrevious
+                    };
+                    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+                    
+                    return Ok(dogs);
+
                 }
                 else
                 {
                     return NoContent();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return BadRequest();
             }

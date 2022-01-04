@@ -1,4 +1,6 @@
 ﻿using SampleREST_API.Models.Custom;
+using SampleREST_API.Models.Pagination;
+using SampleREST_API.Models.Pagination.PaginationParameters;
 using SampleREST_API.Repositories.Abstract;
 using SampleREST_API.Services.Abstract;
 using System;
@@ -31,12 +33,14 @@ namespace SampleREST_API.Services.Concrete
             {
                 throw new Exception("Dog with the given name already exists!");
             }
-            
+
         }
 
-        public async Task<IEnumerable<Dog>> GetDogs()
+        public async Task<PagedList<Dog>> GetDogs(DogParameters dogParameters)
         {
-           return await UW.DogRepository.Get();
+            var result = await UW.DogRepository.Get();
+
+            return PagedList<Dog>.ToPagedList(result, dogParameters.PageNumber, dogParameters.PageSize);
         }
     }
 }

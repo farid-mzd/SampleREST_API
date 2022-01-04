@@ -36,11 +36,19 @@ namespace SampleREST_API.Services.Concrete
 
         }
 
-        public async Task<PagedList<Dog>> GetDogs(DogParameters dogParameters)
+        public async Task<PagedList<Dog>> GetDogsWithPagination(DogParameters dogParameters)
         {
             var result = await UW.DogRepository.Get();
 
             return PagedList<Dog>.ToPagedList(result, dogParameters.PageNumber, dogParameters.PageSize);
         }
+
+        public async Task<PagedList<Dog>> GetDogsWithPaginationFromDB(DogParameters dogParameters)
+        {
+
+         return await UW.DogRepository.GetDogsWithPaginationDirectlyAsync(dogParameters);
+
+        }
+
     }
 }

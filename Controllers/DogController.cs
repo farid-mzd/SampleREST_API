@@ -38,7 +38,7 @@ namespace SampleREST_API.Controllers
         {
             try
             {
-                var dogs = await dogService.GetDogs(dogParameters);
+                var dogs = await dogService.GetDogsWithPaginationFromDB(dogParameters);
 
 
                 if (dogs.TotalCount > 0)

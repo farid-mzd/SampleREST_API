@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SampleREST_API.Models;
 using SampleREST_API.Models.Custom;
-using SampleREST_API.Models.Pagination;
-using SampleREST_API.Models.Pagination.PaginationParameters;
 using SampleREST_API.Repositories.Abstract;
 using System;
 using System.Collections.Generic;
@@ -19,17 +17,10 @@ namespace SampleREST_API.Repositories.Concrete
         {
             
         }
-        //Instead of retrieving all data , this method executes quert string directly in the db.
-        public async Task<PagedList<Dog>> GetDogsWithPaginationDirectlyAsync(DogParameters dogParameters)
-        {
-            return await PagedList<Dog>.ToPagedListAsync(RESTAPIDBcontext.Dogs, dogParameters.PageNumber, dogParameters.PageSize);
-        }
 
         public async Task<Dog> GetWithName(string name)
         {
            return await RESTAPIDBcontext.Dogs.Where(d => d.Name == name ).FirstOrDefaultAsync();
         }
-
-      
     }
 }

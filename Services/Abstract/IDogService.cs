@@ -10,10 +10,7 @@ namespace SampleREST_API.Services.Abstract
 {
     public interface IDogService
     {
-        Task<PagedList<Dog>> GetDogsWithPagination(DogParameters dogParameters);
-
-        Task<PagedList<Dog>> GetDogsWithPaginationFromDB(DogParameters dogParameters);
-
+        Task<PagedList<Dog>> GetDogs(DogParameters dogParameters);
 
         Task<Dog> AddDog(Dog dog);
     }

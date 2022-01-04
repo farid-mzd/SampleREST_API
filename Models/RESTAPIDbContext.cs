@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SampleREST_API.Models.Custom;
+using SampleREST_API.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,14 @@ namespace SampleREST_API.Models
 {
     public class RESTAPIDbContext : DbContext
     {
+        private readonly SqlConnectionConfiguration sqlConnectionConfiguration;
+
         public DbSet<Dog> Dogs { get; set; }
 
-        public RESTAPIDbContext(DbContextOptions<RESTAPIDbContext> options) : base(options) { }
+        public RESTAPIDbContext(DbContextOptions<RESTAPIDbContext> options, SqlConnectionConfiguration sqlConnectionConfiguration) : base(options)
+        {
+            this.sqlConnectionConfiguration = sqlConnectionConfiguration;
+        }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,7 +32,8 @@ namespace SampleREST_API.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-O2A200U\GHOSTWALKER;Initial Catalog=REST_API_DB; Integrated Security=True");
+            optionsBuilder.UseSqlServer(sqlConnectionConfiguration.Value);
+
         }
 
     }

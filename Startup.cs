@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using SampleREST_API.Models.Sorting;
 using SampleREST_API.Models.Custom;
 using AspNetCoreRateLimit;
+using SampleREST_API.Repositories;
 
 namespace SampleREST_API
 {
@@ -33,6 +34,9 @@ namespace SampleREST_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var sqlConnectionConfiguration = new SqlConnectionConfiguration(Configuration.GetConnectionString("MSSQLDBContext"));
+            services.AddSingleton(sqlConnectionConfiguration);
+
             services.AddOptions();
 
             services.AddMemoryCache();

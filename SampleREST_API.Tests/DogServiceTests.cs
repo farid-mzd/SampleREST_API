@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SampleREST_API.Tests.Services
+namespace SampleREST_API.Tests
 {
     public class DogServiceTests
     {
@@ -44,18 +44,13 @@ private readonly DogService _sut;
 
             var parameters = new DogParameters();
 
-            _uwMock.Setup(x => x.DogRepository.Get()).Returns(Task.FromResult<IEnumerable<Dog>>(_dogList));
+             _uwMock.Setup(x => x.DogRepository.Get()).Returns(Task.FromResult(_dogList));
 
-            //_sortHelperMock.Setup(x => x.ApplySort(_dogList.AsQueryable<Dog>(), parameters.Attribute, parameters.Order)).
-            //    Returns(_dogList.AsQueryable<Dog>());
-
-            _sortHelperMock.Setup(x => x.ApplySort(It.IsAny<IQueryable<Dog>>(),null,null)).
+            _sortHelperMock.Setup(x =>  x.ApplySort(It.IsAny<IQueryable<Dog>>(),null,null)).
           Returns(_dogList.AsQueryable<Dog>());
 
-            //_sortHelperMock.VerifyAll();
-
             //Act
-            var result = _sut.GetDogs(parameters).Result.ToList();
+            var result = (await _sut.GetDogs(parameters)).ToList();
 
             //Assert
 
@@ -72,7 +67,73 @@ private readonly DogService _sut;
             //            );
             Assert.Equal(result, _dogList);
              
+        }
+
+        [Fact]
+        public async Task GetDogs_SholudReturnEmptyList_WhenDogsNotExists()
+        {
+            //Arrange
+
+            var parameters = new DogParameters();
+
+            IEnumerable<Dog> emptyData = new List<Dog>(); 
+
+            _uwMock.Setup(x => x.DogRepository.Get()).Returns(Task.FromResult(emptyData));
+
+            _sortHelperMock.Setup(x => x.ApplySort(emptyData.AsQueryable(), null, null)).
+          Returns(emptyData.AsQueryable<Dog>());
+
+            //Act
+            var result = (await _sut.GetDogs(parameters)).ToList();
+
+            //Assert
+
+            Assert.NotNull(result);
+            Assert.Empty(result);
 
         }
+
+        [Theory]
+        [InlineData(-1, -3, 2)]
+        [InlineData(0, 1, 1)]
+        [InlineData(0, 2, 2)]
+        [InlineData(1, 1, 1)]
+        [InlineData(1, 2, 2)]
+        [InlineData(2, 0, 0)]
+        public async Task GetDogs_PagedList_Theory(int pageNumber, int pageSize, int expectedCount)
+        {
+            //Arrange
+
+            var parameters = new DogParameters { PageNumber = pageNumber, PageSize = pageSize};
+
+            _uwMock.Setup(x => x.DogRepository.Get()).Returns(Task.FromResult(_dogList));
+
+            _sortHelperMock.Setup(x => x.ApplySort(It.IsAny<IQueryable<Dog>>(), null, null)).
+          Returns(_dogList.AsQueryable<Dog>());
+
+            //Act
+            var result = (await _sut.GetDogs(parameters)).ToList();
+
+            //Assert
+
+            Assert.Equal(expectedCount, result.Count);
+
+        }
+
+        [Fact]
+        public async Task AddDog_GivenNameExists()
+        {
+            Dog dog = new Dog { Name = "Ninol" };
+
+            _uwMock.Setup(x => x.DogRepository.GetWithName(dog.Name)).Returns(Task.FromResult(dog));
+
+            Exception exception = await Assert.ThrowsAsync<Exception>( async () => await _sut.AddDog(dog));
+
+            Assert.Equal("Dog with the given name already exists!", exception.Message);
+
+            
+        }
+
+       
     }
 }

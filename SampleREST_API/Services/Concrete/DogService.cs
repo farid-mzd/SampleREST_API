@@ -25,7 +25,7 @@ namespace SampleREST_API.Services.Concrete
 
         public async Task<Dog> AddDog(Dog dog)
         {
-            if (await UW.DogRepository.GetWithName(dog.Name) == null)
+            if ((await UW.DogRepository.GetWithName(dog.Name)) == null)
             {
                 UW.DogRepository.Add(dog);
 

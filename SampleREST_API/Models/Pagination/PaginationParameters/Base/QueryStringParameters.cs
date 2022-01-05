@@ -9,11 +9,13 @@ namespace SampleREST_API.Models.Pagination.PaginationParameters.Base
     {
         const int maxPageSize = 10;
 
-        public int PageNumber { get; set; } = 1;
+        private int _pageNumber = 1;
+
+        public int PageNumber { get { return _pageNumber; } set { _pageNumber = (value <= 0) ? _pageNumber : value; } } 
 
         private int _pageSize = 5;
 
-        public int PageSize { get { return _pageSize; } set { _pageSize = (value > maxPageSize) ? maxPageSize : value; } }
+        public int PageSize { get { return _pageSize; } set { _pageSize = (value > maxPageSize) || value <=0 ? maxPageSize : value; } }
 
         public string Order { get; set; }
 
